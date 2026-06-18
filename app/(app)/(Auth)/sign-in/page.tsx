@@ -13,7 +13,7 @@ interface SignInProps {
 export default function SignIn({
   onAuthSuccess,
 }: SignInProps) {
-  const router = useRouter();
+  // 1. Using email and password for supabase compatibility
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -72,7 +72,7 @@ export default function SignIn({
     if (onAuthSuccess) {
       onAuthSuccess(email);
     }
-  };;
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md select-none font-patrick">
@@ -273,7 +273,7 @@ export default function SignIn({
                 </p>
               )}
             </div>
-            {/* Forgot password section */} 
+            {/* Forgot password section */}
             <div className="text-right">
               <button
                 type="button"
