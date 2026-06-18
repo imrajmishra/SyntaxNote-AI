@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { User, Lock, X, ShieldAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { signIn } from "../../api/v1/auth/signIn/route";
 
 interface SignInProps {
   onAuthSuccess?: (username: string) => void;
@@ -13,24 +14,21 @@ export default function SignIn({
   onAuthSuccess,
 }: SignInProps) {
   const router = useRouter();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [showForgotMsg, setShowForgotMsg] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // 2. Added loading state to prevent double clicks
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: { [key: string]: string } = {};
 
-    if (!username.trim()) {
-      newErrors.username = "⚠️ This field is emptier than my desk coffee cup.";
-    } else if (
-      username.toLowerCase() === "admin" ||
-      username.toLowerCase() === "god"
-    ) {
-      newErrors.username =
-        "⚠️ Too much power! Pick a username with less divine responsibility.";
+    if (!email.trim()) {
+      newErrors.email = "⚠️ This field is emptier than my desk coffee cup.";
     }
 
     if (!password) {
@@ -43,17 +41,40 @@ export default function SignIn({
       return;
     }
 
-    localStorage.setItem("username", username);
-    localStorage.setItem("syntaxnote_user", username);
-    if (onAuthSuccess) {
-      onAuthSuccess(username);
+    setIsLoading(true);
+    setErrors({}); // Clear previous errors
+
+    // 3. Create FormData to pass to the Server Action
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+
+    // 4. Call the Server Action
+    const result = await signIn(formData);
+
+    // 5. Handle Server-Side Errors
+    if (result?.success === false) {
+      if (result.error) {
+        // Zod validation errors (e.g., invalid email format)
+        setErrors({
+          email: result.error.email?.[0] || "",
+          password: result.error.password?.[0] || "",
+        });
+      } else if (result.message) {
+        // Supabase Auth errors (e.g., wrong password)
+        setErrors({ general: result.message });
+      }
+      setIsLoading(false);
+      return;
     }
-    // Redirect to the desk page
-    window.location.href = "/home";
-  };
+
+    // Note: If success is true, the server action handles the redirect() to "/"!
+    if (onAuthSuccess) {
+      onAuthSuccess(email);
+    }
+  };;
 
   return (
-    
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md select-none font-patrick">
       <div className="relative w-full max-w-md p-6 mx-4">
         {/* Washi Decals on the Corners */}
@@ -67,7 +88,9 @@ export default function SignIn({
 
           {/* Close button */}
           <button
-            onClick={() => {window.location.href = "/"}}
+            onClick={() => {
+              window.location.href = "/";
+            }}
             className="absolute top-2 right-2 p-1 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
           >
             <X size={20} />
@@ -186,36 +209,43 @@ export default function SignIn({
             </p>
           </div>
 
-          <h2 className="text-center font-caveat text-4xl font-bold text-violet-750 tracking-wide mb-1 drop-shadow-sm">
+          <h2 className="text-center font-caveat text-4xl font-bold text-violet-750 tracking-wide mb-5 drop-shadow-sm">
             NoteBook Sign In
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Username Input */}
+            {/* General Auth Error Display */}
+            {errors.general && (
+              <div className="p-2 bg-red-50 border border-red-200 rounded text-xs text-red-600 text-center font-bold">
+                {errors.general}
+              </div>
+            )}
+            {/* Email Input */}
             <div>
               <label className="text-slate-500 font-bold text-xs uppercase tracking-wider mb-1 flex items-center gap-1">
                 <User size={12} />
-                <span>Cardholder Name</span>
+                <span>Cardholder Email</span>
               </label>
               <input
                 type="text"
-                value={username}
+                value={email}
                 onChange={(e) => {
-                  setUsername(e.target.value);
-                  if (errors.username)
-                    setErrors((prev) => ({ ...prev, username: "" }));
+                  setEmail(e.target.value);
+                  if (errors.email)
+                    setErrors((prev) => ({ ...prev, email: "" }));
+                  if (errors.general)
+                    setErrors((prev) => ({ ...prev, general: "" }));
                 }}
                 className="w-full px-3 py-1.5 bg-white/70 border border-slate-300 rounded font-patrick text-md text-slate-800 focus:outline-none focus:border-violet-500 transition-colors shadow-sm"
-                placeholder="Type your username..."
+                placeholder="Type your email..."
                 maxLength={20}
               />
-              {errors.username && (
+              {errors.email && (
                 <p className="text-[11px] text-red-500 mt-0.5">
-                  {errors.username}
+                  {errors.email}
                 </p>
               )}
             </div>
-
             {/* Password Input */}
             <div>
               <label className="text-slate-500 font-bold text-xs uppercase tracking-wider mb-1 flex items-center gap-1">
@@ -229,6 +259,8 @@ export default function SignIn({
                   setPassword(e.target.value);
                   if (errors.password)
                     setErrors((prev) => ({ ...prev, password: "" }));
+                  if (errors.general)
+                    setErrors((prev) => ({ ...prev, general: "" }));
                 }}
                 onFocus={() => setIsPasswordFocused(true)}
                 onBlur={() => setIsPasswordFocused(false)}
@@ -241,8 +273,7 @@ export default function SignIn({
                 </p>
               )}
             </div>
-
-            {/* Forgot password section */}
+            {/* Forgot password section */} 
             <div className="text-right">
               <button
                 type="button"
@@ -266,18 +297,18 @@ export default function SignIn({
                 </div>
               )}
             </div>
-
             {/* Submit Button */}
             <div className="text-center pt-2">
               <button
                 type="submit"
+                disabled={isLoading}
                 className="
                   relative px-8 py-2 bg-[#fee2e2]/95 hover:bg-[#fecaca] text-rose-800 border-x-4 border-dashed border-rose-400/50
                   font-patrick text-xl font-bold shadow-sm hover:shadow-md transition-all cursor-pointer -rotate-1 w-full
                   before:content-[''] before:absolute before:-left-1 before:top-0 before:bottom-0 before:w-1.5 before:bg-[linear-gradient(45deg,#f43f5e_25%,transparent_25%),linear-gradient(-45deg,#f43f5e_25%,transparent_25%)] before:bg-size-[6px_6px]
                 "
               >
-                Stamp Entrance 🎟️
+                {isLoading ? "Stamping... ⏳" : "Stamp Entrance 🎟️"}
               </button>
             </div>
           </form>
@@ -289,7 +320,9 @@ export default function SignIn({
             </span>
             <button
               type="button"
-              onClick={() => {window.location.href = "/sign-up"}}
+              onClick={() => {
+                window.location.href = "/sign-up";
+              }}
               className="text-xs text-violet-600 hover:text-violet-850 font-bold hover:underline cursor-pointer ml-1"
             >
               Register Card
