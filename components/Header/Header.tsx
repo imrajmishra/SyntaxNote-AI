@@ -15,8 +15,8 @@ const navigationData: NavigationSection[] = [
     href: "/home",
   },
   {
-    title: "MarkNotes",
-    href: "/mdNote",
+    title: "Dashboard",
+    href: "/dashboard",
   },
   {
     title: "Services",
