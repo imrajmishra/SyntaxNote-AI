@@ -19,5 +19,5 @@ export async function signOut() {
   revalidatePath("/", "layout");
 
   // 3. Redirect to the login page
-  redirect("/login");
+  redirect("/sign-in");
 };
