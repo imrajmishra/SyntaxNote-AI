@@ -417,3 +417,24 @@ body {
   margin: 0.75rem 0;
   overflow-x: auto;
 }
+
+/* Styling overrides for light notebook paper editor theme */
+.paper-theme .tiptap {
+  color: #1e293b !important;
+}
+
+.paper-theme .tiptap h1 {
+  color: #0f172a !important;
+  border-bottom: 2px solid rgba(15, 23, 42, 0.15) !important;
+}
+
+.paper-theme .tiptap h2 {
+  color: #1e293b !important;
+  border-bottom: 2px dashed rgba(15, 23, 42, 0.12) !important;
+}
+
+.paper-theme .tiptap pre {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+}
