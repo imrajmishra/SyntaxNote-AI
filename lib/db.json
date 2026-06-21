@@ -1,0 +1,84 @@
+{
+  "folders": [
+    {
+      "id": "bb528769-8564-401f-8777-a14de602fee1",
+      "name": "My Fav",
+      "parentId": null,
+      "createdAt": "2026-06-21T06:11:51.608Z",
+      "updatedAt": "2026-06-21T06:11:51.608Z"
+    },
+    {
+      "id": "c0756a30-64e9-4930-bbbe-512f49632e99",
+      "name": "WORK",
+      "parentId": null,
+      "createdAt": "2026-06-21T06:21:57.457Z",
+      "updatedAt": "2026-06-21T06:21:57.457Z"
+    },
+    {
+      "id": "a1092fe1-6607-4819-94c8-d11ef20f2065",
+      "name": "my fav1",
+      "parentId": "bb528769-8564-401f-8777-a14de602fee1",
+      "createdAt": "2026-06-21T06:54:50.467Z",
+      "updatedAt": "2026-06-21T06:54:50.467Z"
+    }
+  ],
+  "notes": [
+    {
+      "id": "09f4870a-5c23-4080-8b21-30cb005909d4",
+      "title": "FavOne",
+      "content": "<p>how ade you?</p>",
+      "folderId": "c0756a30-64e9-4930-bbbe-512f49632e99",
+      "tags": [
+        "first note"
+      ],
+      "isPinned": true,
+      "isFavorite": true,
+      "createdAt": "2026-06-21T06:11:59.536Z",
+      "updatedAt": "2026-06-21T07:38:08.031Z"
+    },
+    {
+      "id": "47615692-65b6-465c-b800-95f85ea148bb",
+      "title": "newNote",
+      "content": "<h1>NewNote</h1><ul><li><p>Start writing your note here... With no one is working. </p></li><li><p></p></li></ul><p></p>",
+      "folderId": "a1092fe1-6607-4819-94c8-d11ef20f2065",
+      "tags": [],
+      "isPinned": false,
+      "isFavorite": false,
+      "createdAt": "2026-06-21T07:16:45.196Z",
+      "updatedAt": "2026-06-21T08:01:00.537Z"
+    },
+    {
+      "id": "c5401a5a-7ed7-4a17-b2b9-96b72934020e",
+      "title": "myBook",
+      "content": "<h1>myBook</h1><p>Start writing your note here...</p>",
+      "folderId": null,
+      "tags": [],
+      "isPinned": false,
+      "isFavorite": false,
+      "createdAt": "2026-06-21T08:01:23.808Z",
+      "updatedAt": "2026-06-21T08:01:23.808Z"
+    }
+  ],
+  "tags": [
+    {
+      "id": "t1",
+      "name": "todo"
+    },
+    {
+      "id": "t2",
+      "name": "dev"
+    },
+    {
+      "id": "t3",
+      "name": "personal"
+    },
+    {
+      "id": "t4",
+      "name": "tutorial"
+    },
+    {
+      "id": "t-32c4c72c-f429-44d4-a20a-967736c4712e",
+      "name": "first note"
+    }
+  ]
+}
