@@ -218,7 +218,7 @@ export default function SettingsPage() {
               <button
                 type="submit"
                 disabled={isUpdatingPassword}
-                className="w-full py-2 bg-violet-650 hover:bg-violet-700 disabled:opacity-50 text-white font-patrick text-xs font-bold rounded-lg cursor-pointer transition-colors shadow-sm"
+                className="w-full py-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white font-patrick text-xs font-bold rounded-lg cursor-pointer transition-colors shadow-sm"
               >
                 {isUpdatingPassword ? "Updating..." : "Update Security Keycode"}
               </button>
