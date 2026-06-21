@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { User, Lock, X, ShieldAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { signIn } from "../../api/v1/auth/signIn/route";
+import { signIn } from "../../api/v1/auth/signIn/action";
 
 interface SignInProps {
   onAuthSuccess?: (username: string) => void;
@@ -17,7 +17,6 @@ export default function SignIn({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [showForgotMsg, setShowForgotMsg] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
   // 2. Added loading state to prevent double clicks
@@ -273,30 +272,7 @@ export default function SignIn({
                 </p>
               )}
             </div>
-            {/* Forgot password section */}
-            <div className="text-right">
-              <button
-                type="button"
-                onClick={() => setShowForgotMsg(true)}
-                className="text-xs text-violet-600 hover:text-violet-850 hover:underline cursor-pointer"
-              >
-                Forgot Keycode?
-              </button>
-              {showForgotMsg && (
-                <div className="mt-1.5 p-2 bg-amber-50 border border-amber-200 rounded text-[11px] text-left text-slate-700 select-text leading-tight flex items-start gap-1.5">
-                  <ShieldAlert
-                    size={12}
-                    className="text-amber-500 shrink-0 mt-0.5"
-                  />
-                  <div>
-                    Oops! Forgot it? No biggie. Since this notebook is virtual,
-                    we set your keycode to{" "}
-                    <strong className="text-emerald-700">"syntaxnote"</strong>.
-                    (Or write a new one!)
-                  </div>
-                </div>
-              )}
-            </div>
+
             {/* Submit Button */}
             <div className="text-center pt-2">
               <button
